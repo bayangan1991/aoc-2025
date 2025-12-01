@@ -8,17 +8,17 @@ pub fn exec(input: &str) -> (i32, i32) {
         let (l, r) = line.split_at(1);
         let value = r.parse::<i32>().unwrap();
         count_passed_zero += if value > 100 { value / 100 } else { 0 };
-        match l {
+        count_passed_zero += match l {
             "L" => {
                 pos = (pos - value).rem_euclid(100);
-                count_passed_zero += if (pos >= previous_pos && previous_pos != 0) || pos == 0 { 1 } else { 0 };
+                if (pos >= previous_pos && previous_pos != 0) || pos == 0 { 1 } else { 0 }
             }
             "R" => {
                 pos = (pos + value) % 100;
-                count_passed_zero += if pos <= previous_pos { 1 } else { 0 };
+                if pos <= previous_pos { 1 } else { 0 }
             }
-            _ => {}
-        }
+            _ => 0
+        };
         previous_pos = pos;
         count_zero += if pos == 0 { 1 } else { 0 };
     }
