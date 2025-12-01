@@ -10,7 +10,7 @@ pub fn exec(input: &str) -> (i32, i32) {
         count_passed_zero += if value > 100 { value / 100 } else { 0 };
         match l {
             "L" => {
-                pos = (pos - value + 100000) % 100;
+                pos = (pos - value).rem_euclid(100);
                 count_passed_zero += if (pos >= previous_pos && previous_pos != 0) || pos == 0 { 1 } else { 0 };
             }
             "R" => {
