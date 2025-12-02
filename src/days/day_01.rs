@@ -11,13 +11,17 @@ pub fn exec(input: &str) -> (i32, i32) {
         count_passed_zero += match l {
             "L" => {
                 pos = (pos - value).rem_euclid(100);
-                if (pos >= previous_pos && previous_pos != 0) || pos == 0 { 1 } else { 0 }
+                if (pos >= previous_pos && previous_pos != 0) || pos == 0 {
+                    1
+                } else {
+                    0
+                }
             }
             "R" => {
                 pos = (pos + value) % 100;
                 if pos <= previous_pos { 1 } else { 0 }
             }
-            _ => 0
+            _ => 0,
         };
         previous_pos = pos;
         count_zero += if pos == 0 { 1 } else { 0 };
