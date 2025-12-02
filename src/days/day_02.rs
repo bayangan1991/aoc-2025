@@ -1,3 +1,5 @@
+use rayon::prelude::*;
+
 fn is_doubled(num: usize) -> bool {
     if num < 10 {
         return false;
@@ -58,19 +60,20 @@ fn has_repeats(num: usize) -> bool {
 }
 
 pub fn exec(input: &str) -> (usize, usize) {
-    let mut part_1 = 0;
-    let mut part_2 = 0;
-
-    for range in input.split(",") {
+    let (part_1, part_2) = input.par_split(',').map(|range| {
         let (l, r) = range.split_once('-').unwrap();
         let l = l.parse::<usize>().unwrap();
         let r = r.parse::<usize>().unwrap();
+        let mut part_1 = 0;
+        let mut part_2 = 0;
 
-        for i in l..=r {
+        for i in (l..=r) {
             part_1 += if is_doubled(i) { i } else { 0 };
             part_2 += if has_repeats(i) { i } else { 0 };
         }
-    }
+
+        (part_1, part_2)
+    }).reduce(|| (0, 0), |(part_1, part_2), (a, b)| (part_1 + a, part_2 + b));
 
     (part_1, part_2)
 }
