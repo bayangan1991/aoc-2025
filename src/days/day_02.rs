@@ -67,7 +67,7 @@ pub fn exec(input: &str) -> (usize, usize) {
         let mut part_1 = 0;
         let mut part_2 = 0;
 
-        for i in (l..=r) {
+        for i in l..=r {
             part_1 += if is_doubled(i) { i } else { 0 };
             part_2 += if has_repeats(i) { i } else { 0 };
         }
