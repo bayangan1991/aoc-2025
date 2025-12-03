@@ -8,4 +8,6 @@ fn main() {
     println!("Day 01: {:?}", day_01);
     let day_02 = days::day_02::exec(&read_input("02"));
     println!("Day 02: {:?}", day_02);
+    let day_03 = days::day_03::exec(&read_input("03"));
+    println!("Day 03: {:?}", day_03);
 }
