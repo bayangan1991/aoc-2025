@@ -54,6 +54,7 @@ mod tests {
         let input = read_input("03_sample");
         let result = exec(&input);
 
-        assert_eq!(result.0, 357)
+        assert_eq!(result.0, 357);
+        assert_eq!(result.1, 3121910778619);
     }
 }
