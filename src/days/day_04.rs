@@ -44,7 +44,7 @@ pub fn exec(input: &str) -> (usize, usize) {
     let mut part_1 = 0;
     let mut part_2 = 0;
     let mut grid = input.lines().map(parse_line).collect::<Vec<_>>();
-    
+
     loop {
         let (removed, updated_grid) = remove_rolls(&grid);
         if removed == 0 { break; };
@@ -59,7 +59,7 @@ pub fn exec(input: &str) -> (usize, usize) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::utils::read_input;
+    use crate::utils::file::read_input;
 
     #[test]
     fn test_sample() {

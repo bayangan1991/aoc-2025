@@ -81,7 +81,7 @@ pub fn exec(input: &str) -> (usize, usize) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::utils::read_input;
+    use crate::utils::file::read_input;
     #[test]
     fn test_sample() {
         let input = read_input("02_sample");

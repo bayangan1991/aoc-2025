@@ -33,7 +33,7 @@ pub fn exec(input: &str) -> (i32, i32) {
 #[cfg(test)]
 mod tests {
     use crate::days::day_01::exec;
-    use crate::utils::read_input;
+    use crate::utils::file::read_input;
 
     #[test]
     fn example_1() {

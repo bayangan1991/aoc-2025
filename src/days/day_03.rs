@@ -25,7 +25,7 @@ pub fn exec(input: &str) -> (usize, usize) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::utils::read_input;
+    use crate::utils::file::read_input;
     #[test]
     fn test_simple_joltage() {
         assert_eq!(get_joltage(&parse("987654321111111"), 12, 0), 987654321111);
