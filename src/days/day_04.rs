@@ -1,4 +1,4 @@
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone, Copy)]
 enum Thing {
     Paper,
     Nothing,
@@ -10,10 +10,9 @@ fn parse_line(line: &str) -> Vec<Thing> {
     }).collect()
 }
 
-
-pub fn exec(input: &str) -> (usize, usize) {
-    let mut part_1 = 0;
-    let grid = input.lines().map(parse_line).collect::<Vec<_>>();
+fn remove_rolls(grid: &Vec<Vec<Thing>>) -> (usize, Vec<Vec<Thing>>) {
+    let mut removed = 0;
+    let mut updated_grid = grid.clone();
 
     let grid_size = grid.len() - 1;
 
@@ -30,11 +29,31 @@ pub fn exec(input: &str) -> (usize, usize) {
             let sw = if y == grid_size || x == 0 { 0 } else if grid[y + 1][x - 1] == Thing::Paper { 1 } else { 0 };
             let w = if x == 0 { 0 } else if grid[y][x - 1] == Thing::Paper { 1 } else { 0 };
 
-            part_1 += if nw + n + ne + e + se + s + sw + w < 4 { 1 } else { 0 }
+            removed += if nw + n + ne + e + se + s + sw + w < 4 {
+                updated_grid[y][x] = Thing::Nothing;
+                1
+            } else { 0 }
         }
     }
 
-    (part_1, 0)
+    (removed, updated_grid)
+}
+
+
+pub fn exec(input: &str) -> (usize, usize) {
+    let mut part_1 = 0;
+    let mut part_2 = 0;
+    let mut grid = input.lines().map(parse_line).collect::<Vec<_>>();
+    
+    loop {
+        let (removed, updated_grid) = remove_rolls(&grid);
+        if removed == 0 { break; };
+        if part_1 == 0 { part_1 = removed };
+        part_2 += removed;
+        grid = updated_grid;
+    }
+
+    (part_1, part_2)
 }
 
 #[cfg(test)]
@@ -46,6 +65,7 @@ mod tests {
     fn test_sample() {
         let sample = read_input("04_sample");
         let result = exec(&sample);
-        assert_eq!(result.0, 13)
+        assert_eq!(result.0, 13);
+        assert_eq!(result.1, 43);
     }
 }
