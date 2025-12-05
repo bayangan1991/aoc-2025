@@ -22,9 +22,8 @@ pub fn exec(input: &str) -> (usize, usize) {
                 0
             }
             Some((lower, upper)) => if range.0 > upper {
-                let result = upper - lower + 1;
                 curr_range = Some(*range);
-                result
+                upper - lower + 1
             } else {
                 curr_range = Some((lower, range.1.max(upper)));
                 0
