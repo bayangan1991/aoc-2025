@@ -6,7 +6,6 @@ pub fn read_input(name: &str) -> String {
     fs::read_to_string(filepath).expect(&err)
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;

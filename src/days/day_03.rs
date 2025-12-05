@@ -1,26 +1,39 @@
 use rayon::prelude::*;
 
 fn parse(line: &str) -> Vec<usize> {
-    line.chars().map(|c| c.to_digit(10).unwrap() as usize).collect::<Vec<_>>()
+    line.chars()
+        .map(|c| c.to_digit(10).unwrap() as usize)
+        .collect::<Vec<_>>()
 }
 
 fn get_joltage(bank: &[usize], length: usize, prev: usize) -> usize {
     let search_space = &bank[0..bank.len() - length + 1];
-    let (index, max_digit) = search_space.iter().enumerate().reduce(|acc, next| if next.1 > acc.1 { next } else { acc }).unwrap();
+    let (index, max_digit) = search_space
+        .iter()
+        .enumerate()
+        .reduce(|acc, next| if next.1 > acc.1 { next } else { acc })
+        .unwrap();
 
-    if length == 1 { prev + *max_digit } else {
+    if length == 1 {
+        prev + *max_digit
+    } else {
         let (_, new_str) = bank.split_at(index + 1);
         get_joltage(new_str, length - 1, (prev + *max_digit) * 10)
     }
 }
 
 pub fn exec(input: &str) -> (usize, usize) {
-    let part_1 = input.par_lines().map(|line| get_joltage(&parse(line), 2, 0)).sum::<usize>();
-    let part_2 = input.par_lines().map(|line| get_joltage(&parse(line), 12, 0)).sum::<usize>();
+    let part_1 = input
+        .par_lines()
+        .map(|line| get_joltage(&parse(line), 2, 0))
+        .sum::<usize>();
+    let part_2 = input
+        .par_lines()
+        .map(|line| get_joltage(&parse(line), 12, 0))
+        .sum::<usize>();
 
     (part_1, part_2)
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -29,7 +42,16 @@ mod tests {
     #[test]
     fn test_simple_joltage() {
         assert_eq!(get_joltage(&parse("987654321111111"), 12, 0), 987654321111);
-        assert_eq!(get_joltage(&parse("2215452689925244273244333436189317446384838478525478824435233342352236255624326767355438753493222423"), 2, 0), 99);
+        assert_eq!(
+            get_joltage(
+                &parse(
+                    "2215452689925244273244333436189317446384838478525478824435233342352236255624326767355438753493222423"
+                ),
+                2,
+                0
+            ),
+            99
+        );
         assert_eq!(get_joltage(&parse("11"), 2, 0), 11);
         assert_eq!(get_joltage(&parse("121"), 2, 0), 21);
         assert_eq!(get_joltage(&parse("1219"), 2, 0), 29);

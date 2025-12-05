@@ -1,4 +1,4 @@
-pub fn exec(input: &str) -> (i32, i32) {
+pub fn exec(input: &str) -> (usize, usize) {
     let mut pos = 50;
     let mut previous_pos = 50;
     let mut count_zero = 0;
@@ -27,7 +27,7 @@ pub fn exec(input: &str) -> (i32, i32) {
         count_zero += if pos == 0 { 1 } else { 0 };
     }
 
-    (count_zero, count_passed_zero)
+    (count_zero, count_passed_zero as usize)
 }
 
 #[cfg(test)]

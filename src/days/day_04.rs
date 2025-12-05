@@ -1,26 +1,28 @@
-use crate::utils::grid::{parse_grid, Grid};
+use crate::utils::grid::{Grid, parse_grid};
 
 fn remove_rolls(grid: &Grid) -> (usize, Grid) {
     let mut removed = 0;
     let mut updated_grid = grid.data.clone();
 
-
     for (y, line) in grid.data.iter().enumerate() {
         for (x, slot) in line.iter().enumerate() {
-            if slot != &'@' { continue; }
+            if slot != &'@' {
+                continue;
+            }
 
             let count = grid.count_adjacent(x, y, '@', true);
 
             removed += if count < 4 {
                 updated_grid[y][x] = '.';
                 1
-            } else { 0 }
+            } else {
+                0
+            }
         }
     }
 
     (removed, Grid { data: updated_grid })
 }
-
 
 pub fn exec(input: &str) -> (usize, usize) {
     let mut part_1 = 0;
@@ -29,8 +31,12 @@ pub fn exec(input: &str) -> (usize, usize) {
 
     loop {
         let (removed, updated_grid) = remove_rolls(&grid);
-        if removed == 0 { break; };
-        if part_1 == 0 { part_1 = removed };
+        if removed == 0 {
+            break;
+        };
+        if part_1 == 0 {
+            part_1 = removed
+        };
         part_2 += removed;
         grid = updated_grid;
     }

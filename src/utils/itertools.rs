@@ -1,6 +1,6 @@
 use std::iter;
 
-pub fn _pairwise<I>(left: I) -> impl Iterator<Item=(I::Item, Option<I::Item>)>
+pub fn _pairwise<I>(left: I) -> impl Iterator<Item = (I::Item, Option<I::Item>)>
 where
     I: IntoIterator + Clone,
 {

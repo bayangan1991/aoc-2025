@@ -1,16 +1,19 @@
 pub fn exec(input: &str) -> (usize, usize) {
     let (ranges, ingredients) = parse(input);
 
-    let part_1 = ingredients.iter().map(|i| {
-        for range in &ranges {
-            if range.0 <= *i && range.1 >= *i {
-                return 1;
-            } else if range.0 > *i {
-                return 0;
+    let part_1 = ingredients
+        .iter()
+        .map(|i| {
+            for range in &ranges {
+                if range.0 <= *i && range.1 >= *i {
+                    return 1;
+                } else if range.0 > *i {
+                    return 0;
+                }
             }
-        }
-        0
-    }).sum();
+            0
+        })
+        .sum();
 
     let mut part_2 = 0;
     let mut curr_range = None;
@@ -21,12 +24,14 @@ pub fn exec(input: &str) -> (usize, usize) {
                 curr_range = Some((range.0, range.1));
                 0
             }
-            Some((lower, upper)) => if range.0 > upper {
-                curr_range = Some(*range);
-                upper - lower + 1
-            } else {
-                curr_range = Some((lower, range.1.max(upper)));
-                0
+            Some((lower, upper)) => {
+                if range.0 > upper {
+                    curr_range = Some(*range);
+                    upper - lower + 1
+                } else {
+                    curr_range = Some((lower, range.1.max(upper)));
+                    0
+                }
             }
         }
     }
@@ -39,10 +44,20 @@ pub fn exec(input: &str) -> (usize, usize) {
 
 fn parse(input: &str) -> (Vec<(usize, usize)>, Vec<usize>) {
     let (range_str, ingredients_str) = input.split_once("\n\n").unwrap();
-    let mut ranges = range_str.lines().map(|l| l.split_once('-').map(|(l, r)| (l.parse().unwrap(), r.parse().unwrap())).unwrap()).collect::<Vec<(usize, usize)>>();
+    let mut ranges = range_str
+        .lines()
+        .map(|l| {
+            l.split_once('-')
+                .map(|(l, r)| (l.parse().unwrap(), r.parse().unwrap()))
+                .unwrap()
+        })
+        .collect::<Vec<(usize, usize)>>();
     ranges.sort_by(|a, b| a.0.cmp(&b.0));
 
-    let ingredients = ingredients_str.lines().map(|c| c.parse::<usize>().unwrap()).collect::<Vec<_>>();
+    let ingredients = ingredients_str
+        .lines()
+        .map(|c| c.parse::<usize>().unwrap())
+        .collect::<Vec<_>>();
 
     (ranges, ingredients)
 }
