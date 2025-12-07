@@ -1,5 +1,5 @@
-use crate::utils::grid::{parse_grid, Vec2};
-use std::collections::HashSet;
+use crate::utils::grid::{parse_grid, Grid, Vec2};
+use std::collections::{HashMap, HashSet};
 
 pub fn exec(input: &str) -> (usize, usize) {
     let grid = parse_grid(input);
@@ -48,7 +48,74 @@ pub fn exec(input: &str) -> (usize, usize) {
         beams = new_beams.clone();
     }
 
-    (splits.len(), 0)
+    let mut cache = HashMap::new();
+
+    let part_2 = count_paths(start, 0, height - 1, &grid, &mut cache);
+
+    (splits.len(), part_2)
+}
+
+fn count_paths(
+    start: Vec2,
+    prev: usize,
+    max_distance: usize,
+    grid: &Grid,
+    cache: &mut HashMap<Vec2, usize>,
+) -> usize {
+    if cache.contains_key(&start) {
+        return *cache.get(&start).unwrap();
+    }
+
+    if start.y == max_distance {
+        return 1;
+    }
+
+    let mut count = prev;
+
+    match grid.get(Vec2 {
+        x: start.x,
+        y: start.y + 1,
+    }) {
+        Some('.') => {
+            count += count_paths(
+                Vec2 {
+                    x: start.x,
+                    y: start.y + 1,
+                },
+                prev,
+                max_distance,
+                grid,
+                cache,
+            );
+        }
+        Some('^') => {
+            count += count_paths(
+                Vec2 {
+                    x: start.x - 1,
+                    y: start.y + 1,
+                },
+                prev,
+                max_distance,
+                grid,
+                cache,
+            );
+            count += count_paths(
+                Vec2 {
+                    x: start.x + 1,
+                    y: start.y + 1,
+                },
+                prev,
+                max_distance,
+                grid,
+                cache,
+            );
+        }
+        _ => panic!("oops"),
+    };
+
+    cache.insert(start, count);
+
+    count
 }
 
 #[cfg(test)]
@@ -61,6 +128,6 @@ mod tests {
         let input = read_input("07_sample");
         let result = exec(&input);
         assert_eq!(result.0, 21);
-        assert_eq!(result.1, 0);
+        assert_eq!(result.1, 40);
     }
 }
