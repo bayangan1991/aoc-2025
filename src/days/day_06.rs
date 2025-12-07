@@ -31,7 +31,7 @@ pub fn exec(input: &str) -> (usize, usize) {
 
     let mut part_2 = 0;
     let mut nums = Vec::new();
-    let mut num_string = String::new();
+    let mut num_string: String;
 
     for i in (0..width).rev() {
         num_string = String::from_utf8(
