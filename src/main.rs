@@ -12,6 +12,7 @@ fn main() {
         || days::day_04::exec(&read_input("04")),
         || days::day_05::exec(&read_input("05")),
         || days::day_06::exec(&read_input("06")),
+        || days::day_07::exec(&read_input("07")),
     ]
     .par_iter()
     .enumerate()

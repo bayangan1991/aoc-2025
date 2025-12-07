@@ -1,4 +1,4 @@
-use crate::utils::grid::{Grid, parse_grid};
+use crate::utils::grid::{parse_grid, Grid, Vec2};
 
 fn remove_rolls(grid: &Grid) -> (usize, Grid) {
     let mut removed = 0;
@@ -10,7 +10,7 @@ fn remove_rolls(grid: &Grid) -> (usize, Grid) {
                 continue;
             }
 
-            let count = grid.count_adjacent(x, y, '@', true);
+            let count = grid.count_adjacent(Vec2 { x, y }, '@', true);
 
             removed += if count < 4 {
                 updated_grid[y][x] = '.';
