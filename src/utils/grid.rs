@@ -23,7 +23,7 @@ pub fn parse_grid(input: &str) -> Grid {
 impl Grid {
     pub fn get_size(&self) -> Vec2 {
         Vec2 {
-            x: self.data.first().map(|line| line.len()).unwrap_or(0),
+            x: self.data.first().map(|line| line.len() + 1).unwrap_or(0),
             y: self.data.len(),
         }
     }

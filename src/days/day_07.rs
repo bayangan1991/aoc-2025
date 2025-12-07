@@ -118,6 +118,35 @@ fn count_paths(
     count
 }
 
+pub fn _exec_adam(input: &str) -> (usize, usize) {
+    let grid = parse_grid(input);
+    let start = grid.find_one('S').unwrap();
+
+    let mut part_1 = 0;
+    let grid_size = grid.get_size();
+    let mut tachyon_counts = vec![0; grid_size.x];
+
+    tachyon_counts[start.x] = 1;
+
+    for y in 0..grid_size.y {
+        for x in 0..grid_size.x {
+            let tachyon_count = tachyon_counts[x];
+            if tachyon_count == 0 {
+                continue;
+            }
+
+            if let Some('^') = grid.get(Vec2 { x, y }) {
+                part_1 += 1;
+                tachyon_counts[x - 1] += tachyon_count;
+                tachyon_counts[x] = 0;
+                tachyon_counts[x + 1] += tachyon_count;
+            };
+        }
+    }
+
+    (part_1, tachyon_counts.iter().sum())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
