@@ -13,6 +13,21 @@ impl Vec2 {
         (self.x, self.y)
     }
 }
+#[derive(Debug, Eq, PartialEq, Hash, Copy, Clone)]
+pub struct Vec3 {
+    pub x: usize,
+    pub y: usize,
+    pub z: usize,
+}
+
+impl Vec3 {
+    pub fn distance(&self, other: &Vec3) -> f64 {
+        ((self.x.abs_diff(other.x).pow(2)
+            + self.y.abs_diff(other.y).pow(2)
+            + self.z.abs_diff(other.z).pow(2)) as f64)
+            .sqrt()
+    }
+}
 
 impl Grid {
     pub fn parse(input: &str) -> Grid {
