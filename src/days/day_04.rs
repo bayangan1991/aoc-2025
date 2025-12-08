@@ -1,4 +1,4 @@
-use crate::utils::grid::{parse_grid, Grid, Vec2};
+use crate::utils::grid::{Grid, Vec2};
 
 fn remove_rolls(grid: &Grid) -> (usize, Grid) {
     let mut removed = 0;
@@ -27,7 +27,7 @@ fn remove_rolls(grid: &Grid) -> (usize, Grid) {
 pub fn exec(input: &str) -> (usize, usize) {
     let mut part_1 = 0;
     let mut part_2 = 0;
-    let mut grid = parse_grid(input);
+    let mut grid = Grid::parse(input);
 
     loop {
         let (removed, updated_grid) = remove_rolls(&grid);

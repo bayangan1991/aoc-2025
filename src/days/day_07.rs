@@ -1,8 +1,8 @@
-use crate::utils::grid::{parse_grid, Grid, Vec2};
+use crate::utils::grid::{Grid, Vec2};
 use std::collections::{HashMap, HashSet};
 
 pub fn exec(input: &str) -> (usize, usize) {
-    let grid = parse_grid(input);
+    let grid = Grid::parse(input);
 
     let start = grid.find_one('S').unwrap();
 
@@ -119,7 +119,7 @@ fn count_paths(
 }
 
 pub fn _exec_adam(input: &str) -> (usize, usize) {
-    let grid = parse_grid(input);
+    let grid = Grid::parse(input);
     let start = grid.find_one('S').unwrap();
 
     let mut part_1 = 0;

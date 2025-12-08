@@ -14,13 +14,13 @@ impl Vec2 {
     }
 }
 
-pub fn parse_grid(input: &str) -> Grid {
-    Grid {
-        data: input.lines().map(|line| line.chars().collect()).collect(),
-    }
-}
-
 impl Grid {
+    pub fn parse(input: &str) -> Grid {
+        Grid {
+            data: input.lines().map(|line| line.chars().collect()).collect(),
+        }
+    }
+
     pub fn get_size(&self) -> Vec2 {
         Vec2 {
             x: self.data.first().map(|line| line.len() + 1).unwrap_or(0),
