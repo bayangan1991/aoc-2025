@@ -15,6 +15,7 @@ fn main() {
         || days::day_06::exec(&read_input("06")),
         || days::day_07::exec(&read_input("07")),
         || days::day_08::exec(&read_input("08"), 1000),
+        || days::day_09::exec(&read_input("09")),
     ]
     .par_iter()
     .enumerate()
@@ -32,9 +33,9 @@ fn main() {
 
     for result in result {
         println!(
-            "Day {}: {}μs\t{}\t{}",
+            "Day {}: {:?}\t{}\t{}",
             result.0 + 1,
-            result.2.as_micros(),
+            result.2,
             result.1.0,
             result.1.1,
         );

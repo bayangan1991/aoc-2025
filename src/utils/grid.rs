@@ -3,12 +3,12 @@ pub struct Grid {
 }
 
 #[derive(Debug, Eq, PartialEq, Hash, Copy, Clone)]
-pub struct Vec2 {
-    pub(crate) x: usize,
-    pub(crate) y: usize,
+pub struct Vec2<T = usize> {
+    pub(crate) x: T,
+    pub(crate) y: T,
 }
 
-impl Vec2 {
+impl Vec2<usize> {
     pub fn as_tuple(&self) -> (usize, usize) {
         (self.x, self.y)
     }
