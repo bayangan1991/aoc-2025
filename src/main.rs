@@ -1,4 +1,5 @@
 use rayon::iter::*;
+use std::time::Instant;
 use utils::file::read_input;
 
 mod days;
@@ -17,10 +18,25 @@ fn main() {
     ]
     .par_iter()
     .enumerate()
-    .map(|(index, f)| (index, f()))
+    .map(|(index, f)| {
+        let mut times = Vec::with_capacity(10);
+        for _ in 0..50 {
+            let start = Instant::now();
+            f();
+            times.push(Instant::now().duration_since(start));
+        }
+        let result = f();
+        (index, result, *times.iter().min().unwrap())
+    })
     .collect::<Vec<_>>();
 
     for result in result {
-        println!("Day {}: {}\t{}", result.0 + 1, result.1.0, result.1.1);
+        println!(
+            "Day {}: {}μs\t{}\t{}",
+            result.0 + 1,
+            result.2.as_micros(),
+            result.1.0,
+            result.1.1,
+        );
     }
 }
