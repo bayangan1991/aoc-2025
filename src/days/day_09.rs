@@ -290,7 +290,8 @@ fn point_inside_polygon(point: &Point, v_lines: &[VLine]) -> bool {
         if v_line.x >= point.x {
             return is_outside;
         }
-        if (v_line.y1 as f64) < (point.y as f64 + 0.1) {
+        let offset_y = (point.y as f64 + 0.1);
+        if (v_line.y1 as f64) < offset_y && offset_y < (v_line.y2 as f64) {
             is_outside = !is_outside;
         }
     }
