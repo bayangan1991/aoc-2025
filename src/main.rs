@@ -18,6 +18,7 @@ impl Display for AutoDuration {
 #[derive(Tabled)]
 struct Result {
     day: usize,
+    author: &'static str,
     duration: AutoDuration,
     part_a: usize,
     part_b: usize,
@@ -25,30 +26,31 @@ struct Result {
 
 fn main() {
     let result = [
-        || days::day_01::exec(&read_input("01")),
-        || days::day_02::exec(&read_input("02")),
-        || days::day_03::exec(&read_input("03")),
-        || days::day_04::exec(&read_input("04")),
-        || days::day_05::exec(&read_input("05")),
-        || days::day_06::exec(&read_input("06")),
-        || days::day_07::exec(&read_input("07")),
-        || days::day_08::exec(&read_input("08"), 1000),
-        || days::day_09::exec_jarek(&read_input("09")),
-        || days::day_10::exec(&read_input("10")),
-        || days::day_11::exec(&read_input("11")),
+        || (1, "Ryan", days::day_01::exec(&read_input("01"))),
+        || (2, "Ryan", days::day_02::exec(&read_input("02"))),
+        || (3, "Ryan", days::day_03::exec(&read_input("03"))),
+        || (4, "Ryan", days::day_04::exec(&read_input("04"))),
+        || (5, "Ryan", days::day_05::exec(&read_input("05"))),
+        || (6, "Ryan", days::day_06::exec(&read_input("06"))),
+        || (7, "Ryan", days::day_07::exec(&read_input("07"))),
+        || (8, "Ryan", days::day_08::exec(&read_input("08"), 1000)),
+        || (9, "Paul", days::day_09::exec(&read_input("09"))),
+        || (9, "Jarek", days::day_09::exec_jarek(&read_input("09"))),
+        || (10, "Ryan", days::day_10::exec(&read_input("10"))),
+        || (11, "Ryan", days::day_11::exec(&read_input("11"))),
     ]
     .par_iter()
-    .enumerate()
-    .map(|(index, f)| {
-        let mut times = Vec::with_capacity(10);
-        for _ in 0..10 {
+    .map(|f| {
+        let mut times = Vec::with_capacity(30);
+        for _ in 0..30 {
             let start = Instant::now();
             f();
             times.push(Instant::now().duration_since(start));
         }
-        let result = f();
+        let (day, author, result) = f();
         Result {
-            day: index + 1,
+            day,
+            author,
             duration: AutoDuration(*times.iter().min().unwrap()),
             part_a: result.0,
             part_b: result.1,
