@@ -30,20 +30,14 @@ pub fn exec(input: &str) -> (usize, usize) {
     let part_1 = sizes.iter().max().unwrap();
 
     let edges = pairwise(&points)
-        .filter_map(|(a, b)| match b {
-            Some(b) => Some((*a, *b)),
-            None => None,
-        })
+        .filter_map(|(a, b)| b.map(|b| (*a, *b)))
         .chain([(points[points.len() - 1], points[0])])
         .collect::<Vec<Edge>>();
 
     let mut part_2 = 0;
     for (a, b) in combinations.iter() {
         let rect = [*a, Point { x: b.x, y: a.y }, *b, Point { x: a.x, y: b.y }];
-        let inside = rect
-            .iter()
-            .map(|p| is_point_in_polygon(p, &points))
-            .all(|b| b);
+        let inside = rect.iter().all(|p| is_point_in_polygon(p, &points));
 
         if !inside {
             continue;
@@ -79,24 +73,22 @@ fn edges_intersect(edge_1: &Edge, edge_2: &Edge) -> bool {
     let (p1, p2) = edge_1;
     let (p3, p4) = edge_2;
 
-    let d1 = ccw(&p1, &p2, &p3);
-    let d2 = ccw(&p1, &p2, &p4);
-    let d3 = ccw(&p3, &p4, &p1);
-    let d4 = ccw(&p3, &p4, &p2);
+    let d1 = ccw(p1, p2, p3);
+    let d2 = ccw(p1, p2, p4);
+    let d3 = ccw(p3, p4, p1);
+    let d4 = ccw(p3, p4, p2);
 
     ((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) && ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0))
 }
 
-fn is_point_in_polygon(point: &Point, poly: &Vec<Point>) -> bool {
+fn is_point_in_polygon(point: &Point, poly: &[Point]) -> bool {
     let size = poly.len();
     let mut inside = false;
 
     let mut p1 = poly[size - 1];
 
-    for i in 0..size {
-        let p2 = poly[i];
-
-        let cross_product = ccw(&p1, &p2, point);
+    for p2 in poly {
+        let cross_product = ccw(&p1, p2, point);
 
         let min = Point {
             x: p1.x.min(p2.x),
@@ -125,7 +117,7 @@ fn is_point_in_polygon(point: &Point, poly: &Vec<Point>) -> bool {
             }
         }
 
-        p1 = p2;
+        p1 = *p2;
     }
 
     inside
