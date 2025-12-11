@@ -34,6 +34,7 @@ fn main() {
         || days::day_07::exec(&read_input("07")),
         || days::day_08::exec(&read_input("08"), 1000),
         || days::day_09::exec_jarek(&read_input("09")),
+        || days::day_10::exec(&read_input("10")),
     ]
     .par_iter()
     .enumerate()
