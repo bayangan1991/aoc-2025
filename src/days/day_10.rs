@@ -1,5 +1,4 @@
 use rayon::prelude::*;
-use std::ops::{Shl, ShlAssign};
 
 struct Machine {
     desired: usize,
@@ -19,7 +18,7 @@ fn solve_machine(machine: &Machine) -> usize {
     for button in machine.buttons.iter() {
         let mut new_current = machine.current;
         for flip in button.iter() {
-            new_current ^= (1 << *flip);
+            new_current ^= 1 << *flip;
         }
         if new_current == machine.current {
             return machine.presses + 1;
