@@ -38,6 +38,7 @@ fn main() {
         || (9, "Jarek", days::day_09::exec_jarek(&read_input("09"))),
         || (10, "Ryan", days::day_10::exec(&read_input("10"))),
         || (11, "Ryan", days::day_11::exec(&read_input("11"))),
+        || (11, "Evan", days::day_11::exec_evan(&read_input("11"))),
     ]
     .par_iter()
     .map(|f| {

@@ -30,16 +30,43 @@ fn parse(input: &str) -> HashMap<String, Vec<String>> {
 pub fn exec(input: &str) -> (usize, usize) {
     let map = parse(input);
 
-    let mut p1_cache = HashMap::new();
-    let part_1 = count_paths("you", &map, true, true, &mut p1_cache);
-    let mut p2_cache = HashMap::new();
-    let part_2 = count_paths("svr", &map, false, false, &mut p2_cache);
+    let part_1 = cached_count_paths("you", "out", &map, true, true);
+    let part_2 = cached_count_paths("svr", "out", &map, false, false);
 
     (part_1, part_2)
 }
 
+pub fn exec_evan(input: &str) -> (usize, usize) {
+    let map = parse(input);
+    let part_1 = cached_count_paths("you", "out", &map, true, true);
+
+    let srv_fft = cached_count_paths("svr", "fft", &map, true, true);
+    let fft_dac = cached_count_paths("fft", "dac", &map, true, true);
+    let dac_out = cached_count_paths("dac", "out", &map, true, true);
+
+    let srv_dac = cached_count_paths("svr", "dac", &map, true, true);
+    let dac_fft = cached_count_paths("dac", "fft", &map, true, true);
+    let fft_out = cached_count_paths("fft", "out", &map, true, true);
+
+    let part_2 = (srv_fft * fft_dac * dac_out) + (srv_dac * dac_fft * fft_out);
+
+    (part_1, part_2)
+}
+
+fn cached_count_paths(
+    node: &str,
+    dest: &str,
+    map: &HashMap<String, Vec<String>>,
+    visited_fft: bool,
+    visited_dac: bool,
+) -> usize {
+    let mut cache = HashMap::with_capacity(1500);
+    count_paths(node, dest, map, visited_fft, visited_dac, &mut cache)
+}
+
 fn count_paths(
     node: &str,
+    dest: &str,
     map: &HashMap<String, Vec<String>>,
     visited_fft: bool,
     visited_dac: bool,
@@ -47,7 +74,7 @@ fn count_paths(
 ) -> usize {
     let key = (node.to_string(), visited_fft, visited_dac);
 
-    if node == "out" {
+    if node == dest {
         let result = if visited_fft && visited_dac { 1 } else { 0 };
         return result;
     }
@@ -62,7 +89,7 @@ fn count_paths(
     if let Some(links) = map.get(node) {
         let result = links
             .iter()
-            .map(|link| count_paths(link, map, visited_fft, visited_dac, cache))
+            .map(|link| count_paths(link, dest, map, visited_fft, visited_dac, cache))
             .sum();
         cache.insert(key, result);
         result
