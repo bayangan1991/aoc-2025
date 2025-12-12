@@ -39,11 +39,12 @@ fn main() {
         || (10, "Ryan", days::day_10::exec(&read_input("10"))),
         || (11, "Ryan", days::day_11::exec(&read_input("11"))),
         || (11, "Evan", days::day_11::exec_evan(&read_input("11"))),
+        || (12, "Ryan", days::day_12::exec(&read_input("12"))),
     ]
     .par_iter()
     .map(|f| {
         let mut times = Vec::with_capacity(30);
-        for _ in 0..30 {
+        for _ in 0..1 {
             let start = Instant::now();
             f();
             times.push(Instant::now().duration_since(start));
