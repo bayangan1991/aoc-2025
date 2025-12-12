@@ -1,28 +1,30 @@
-use crate::utils::grid::Vec2;
-
 pub fn exec(input: &str) -> (usize, usize) {
     let trees = input.lines().skip(30).map(parse_tree).collect::<Vec<_>>();
 
-    let mut fittable_areas = 0;
+    (
+        trees
+            .iter()
+            .map(|(area, presents)| {
+                let (min_area, max_area) = presents
+                    .iter()
+                    .map(|x| (x * 7, x * 9))
+                    .reduce(|a, b| (a.0 + b.0, a.1 + b.1))
+                    .unwrap();
 
-    for (size, presents) in trees {
-        let available_area = size.x * size.y;
-        let min_area_required = presents.iter().map(|x| x * 7).sum::<usize>();
-        let max_area_required = presents.iter().map(|x| x * 9).sum::<usize>();
-
-        if available_area < min_area_required {
-            continue;
-        }
-        if available_area >= max_area_required {
-            fittable_areas += 1;
-            continue;
-        }
-    }
-
-    (fittable_areas, 0)
+                if *area < min_area {
+                    0
+                } else if *area >= max_area {
+                    1
+                } else {
+                    panic!("oops")
+                }
+            })
+            .sum::<usize>(),
+        0,
+    )
 }
 
-fn parse_tree(input: &str) -> (Vec2, [usize; 6]) {
+fn parse_tree(input: &str) -> (usize, [usize; 6]) {
     let (left, right) = input.split_once(": ").unwrap();
     let (x, y) = left.split_once('x').unwrap();
 
@@ -31,10 +33,7 @@ fn parse_tree(input: &str) -> (Vec2, [usize; 6]) {
         .map(|n| n.parse().unwrap())
         .collect::<Vec<usize>>();
     (
-        Vec2 {
-            x: x.parse().unwrap(),
-            y: y.parse().unwrap(),
-        },
+        x.parse::<usize>().unwrap() * y.parse::<usize>().unwrap(),
         presents[0..6].try_into().unwrap(),
     )
 }

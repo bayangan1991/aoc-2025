@@ -44,7 +44,7 @@ fn main() {
     .par_iter()
     .map(|f| {
         let mut times = Vec::with_capacity(30);
-        for _ in 0..1 {
+        for _ in 0..30 {
             let start = Instant::now();
             f();
             times.push(Instant::now().duration_since(start));
